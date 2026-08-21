@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="sunset" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF7B00"/>
+      <stop offset="50%" stop-color="#FFAE19"/>
+      <stop offset="100%" stop-color="#2F80ED"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#sunset)"/>
+  <path d="M0 300 Q100 290 200 300 T400 300 L400 400 L0 400 Z" fill="#1D4ED8" opacity="0.9"/>
+  <circle cx="200" cy="270" r="50" fill="#FFE082"/>
+  <path d="M40 330 Q60 250 100 230 L105 233 Q65 253 45 330 Z" fill="#1E1E1E"/>
+  <path d="M100 230 Q120 200 150 200 Q110 215 100 230" fill="#1E1E1E"/>
+  <path d="M100 230 Q70 210 50 220 Q80 220 100 230" fill="#1E1E1E"/>
+  <path d="M100 230 Q90 190 105 180 Q100 200 100 230" fill="#1E1E1E"/>
+  <path d="M220 310 L220 290 Q220 280 230 280 Q240 280 240 290 L240 310" stroke="#1E1E1E" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="230" cy="272" r="5" fill="#1E1E1E"/>
+  <path d="M215 275 L230 282 L245 275" fill="none" stroke="#1E1E1E" stroke-width="3" stroke-linecap="round"/>
+</svg>

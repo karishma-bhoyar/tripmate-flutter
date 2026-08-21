@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <radialGradient id="globeGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="45%" stop-color="#E8F1FF" />
+      <stop offset="90%" stop-color="#D0E3FC" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#C0D9F9" stop-opacity="0.2" />
+    </radialGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E75EC" />
+      <stop offset="100%" stop-color="#0056C6" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="145%" height="145%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0A4FA4" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <circle cx="56" cy="62" r="36" fill="url(#globeGrad)" />
+  <path d="M22 55 Q56 68 90 55" fill="none" stroke="#A7C7F2" stroke-width="1" opacity="0.6" />
+  <path d="M56 26 A36 36 0 0 0 56 98" fill="none" stroke="#A7C7F2" stroke-width="1" opacity="0.6" />
+  <circle cx="56" cy="62" r="41" fill="none" stroke="#1E75EC" stroke-width="1.2" opacity="0.12" />
+  <path d="M21 39 A41 41 0 0 1 42 23" fill="none" stroke="#1E75EC" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="1 5 6 5 1" />
+  <path d="M85 39 A41 41 0 0 1 31 92" fill="none" stroke="url(#primaryGrad)" stroke-width="1.6" opacity="0.75" />
+  <path d="M 82 82 C 70 94 54 99 38 98 C 29 97 22 93 23 88 C 24 84 29 88 38 90 C 52 92 68 88 82 82 Z" fill="url(#primaryGrad)" filter="url(#shadow)" />
+  <path d="M 23 88 C 42 98 64 96 82 82" fill="none" stroke="url(#primaryGrad)" stroke-width="2.5" stroke-linecap="round" />
+  <g transform="translate(82, 45) rotate(42)" filter="url(#shadow)">
+    <path d="M 0,-15 C 0.8,-13.5 2,-8 2.8,-4 L 13,2.5 C 13,3.3 12.2,3.7 11.4,3.7 L 2.8,0 C 2.4,2 1.6,6 1.2,9 L 4.8,11.5 C 4.8,12.3 4,12.7 3.6,12.7 L 0,11 L -3.6,12.7 C -4,12.7 -4.8,12.3 -4.8,11.5 L -1.2,9 C -1.6,2 -2.4,0 -2.8,0 L -11.4,3.7 C -12.2,3.7 -13,3.3 -13,2.5 L -2.8,-4 C -2,-8 -0.8,-13.5 0,-15 Z" fill="url(#primaryGrad)" />
+  </g>
+</svg>
