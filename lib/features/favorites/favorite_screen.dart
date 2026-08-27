@@ -7,11 +7,15 @@ import 'package:flutter_application_tripmate/core/constants/app_size.dart';
 import 'package:flutter_application_tripmate/core/theme/app_text_style.dart';
 import 'package:flutter_application_tripmate/features/destination/data/models/destination_model.dart';
 import 'package:flutter_application_tripmate/features/favorites/data/favorite_store.dart';
+import 'package:flutter_application_tripmate/features/favorites/logic/favorites_bloc/favorites_bloc.dart';
+import 'package:flutter_application_tripmate/features/favorites/logic/favorites_bloc/favorites_event.dart';
+import 'package:flutter_application_tripmate/features/favorites/logic/favorites_bloc/favorites_state.dart';
 import 'package:flutter_application_tripmate/features/favorites/models/favorite_model.dart';
 import 'package:flutter_application_tripmate/features/home/widgets/hotel_card.dart';
 import 'package:flutter_application_tripmate/widgets/main_layout.dart';
 import 'package:flutter_application_tripmate/widgets/common/primary_button.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:flutter_application_tripmate/widgets/common/shimmer_skeleton.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class FavoriteScreen extends StatefulWidget {
@@ -25,6 +29,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<FavoritesBloc>().add(const FetchFavoritesEvent());
   }
 
   @override
@@ -37,10 +42,20 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           _buildHeader(),
           const SizedBox(height: AppSizes.spacing24),
           Expanded(
-            child: ValueListenableBuilder(
-              valueListenable: FavoriteStore.box.listenable(),
-              builder: (context, box, _) {
-                final favorites = FavoriteStore.getAllFavorites();
+            child: BlocBuilder<FavoritesBloc, FavoritesState>(
+              builder: (context, state) {
+                List<FavoriteModel> favorites = FavoriteStore.getAllFavorites();
+                if (state is FavoritesLoaded) {
+                  favorites = state.favorites;
+                }
+
+                if (state is FavoritesLoading && favorites.isEmpty) {
+                  return ListView.builder(
+                    itemCount: 4,
+                    itemBuilder: (context, index) => const HotelCardSkeleton(),
+                  );
+                }
+
                 if (favorites.isEmpty) {
                   return _buildEmptyState();
                 }
@@ -211,8 +226,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () async {
-                                await FavoriteStore.removeFavorite(favorite.id);
+                              onTap: () {
+                                context
+                                    .read<FavoritesBloc>()
+                                    .add(RemoveFavoriteEvent(favorite.id));
                               },
                               child: const Icon(
                                 Icons.favorite_rounded,

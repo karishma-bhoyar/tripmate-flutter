@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_tripmate/features/notifications/presentation/notification_overlay_sheet.dart';
 import 'package:flutter_application_tripmate/core/constants/app_colors.dart';
 import 'package:flutter_application_tripmate/core/constants/app_size.dart';
 import 'package:flutter_application_tripmate/core/constants/assets.dart';
@@ -52,7 +53,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
       location: 'Indonesia',
       rating: 4.8,
       category: 'Beach',
-      price: 50000,
+      price: 35000,
+    ),
+    ExploreDestination(
+      imageUrl:
+          'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=500&q=80',
+      name: 'Maldives',
+      location: 'South Asia',
+      rating: 4.9,
+      category: 'Beach',
+      price: 48000,
     ),
     ExploreDestination(
       imageUrl:
@@ -74,12 +84,48 @@ class _ExploreScreenState extends State<ExploreScreen> {
     ),
     ExploreDestination(
       imageUrl:
+          'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=500&q=80',
+      name: 'Dubai',
+      location: 'UAE',
+      rating: 4.8,
+      category: 'City',
+      price: 25000,
+    ),
+    ExploreDestination(
+      imageUrl:
           'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=500&q=80',
       name: 'Switzerland',
-      location: 'Switzerland',
-      rating: 4.8,
+      location: 'Alps, Europe',
+      rating: 4.9,
       category: 'Mountain',
-      price: 50000,
+      price: 42000,
+    ),
+    ExploreDestination(
+      imageUrl:
+          'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80',
+      name: 'Manali',
+      location: 'Himachal Pradesh, India',
+      rating: 4.5,
+      category: 'Mountain',
+      price: 8000,
+    ),
+    ExploreDestination(
+      imageUrl:
+          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=80',
+      name: 'Queenstown',
+      location: 'New Zealand',
+      rating: 4.9,
+      category: 'Adventure',
+      price: 38000,
+    ),
+    ExploreDestination(
+      imageUrl:
+          'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=500&q=80',
+      name: 'Costa Rica',
+      location: 'Central America',
+      rating: 4.7,
+      category: 'Adventure',
+      price: 29000,
     ),
   ];
 
@@ -132,7 +178,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(),
+            _buildHeader(context),
             const SizedBox(height: AppSizes.spacing24),
             _buildSearchAndFilter(
               controller: _searchController,
@@ -198,7 +244,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   }
 }
 
-Widget _buildHeader() {
+Widget _buildHeader(BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -221,7 +267,7 @@ Widget _buildHeader() {
       Row(
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () => NotificationOverlaySheet.show(context),
             borderRadius: BorderRadius.circular(AppSizes.radius100),
             child: Container(
               padding: const EdgeInsets.all(AppSizes.spacing10),

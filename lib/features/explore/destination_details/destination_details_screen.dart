@@ -41,7 +41,7 @@ class DestinationDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildImageHeader(context),
-                  _buildDetailsSection(),
+                  _buildDetailsSection(context),
                   _buildPopularHotels(),
                   _buildThingsToDo(),
                   const SizedBox(height: AppSizes.spacing24),
@@ -117,7 +117,7 @@ class DestinationDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailsSection() {
+  Widget _buildDetailsSection(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(AppSizes.spacing24),
       child: Column(
@@ -164,36 +164,53 @@ class DestinationDetailsScreen extends StatelessWidget {
               ),
               const SizedBox(width: AppSizes.spacing16),
               // Right Column: Rating & Reviews Count
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
+              GestureDetector(
+                onTap: () => _showAddReviewSheet(context, destination.name),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.spacing12,
+                    vertical: 6.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.whiteColor,
+                    borderRadius: BorderRadius.circular(AppSizes.radius12),
+                    border: Border.all(
+                      color: AppColors.greyColor.withValues(alpha: 0.15),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Icon(
-                        Icons.star_rounded,
-                        color: Colors.amber,
-                        size: 20,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.star_rounded,
+                            color: Colors.amber,
+                            size: 20,
+                          ),
+                          const SizedBox(width: AppSizes.spacing4),
+                          Text(
+                            destination.rating.toString(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: AppSizes.spacing4),
+                      const SizedBox(height: 2),
                       Text(
-                        destination.rating.toString(),
-                        style: const TextStyle(
+                        'Tap to rate',
+                        style: AppTextStyles.caption.copyWith(
+                          color: AppColors.primaryColor,
+                          fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '(3,240 reviews)',
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.greyColor,
-                      fontSize: 11,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
@@ -636,6 +653,88 @@ class DestinationDetailsScreen extends StatelessWidget {
             context.router.push(HotelListRoute(destination: destination));
           },
         ),
+      ),
+    );
+  }
+
+  void _showAddReviewSheet(BuildContext context, String name) {
+    int rating = 5;
+    final reviewController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setState) {
+          return Padding(
+            padding: EdgeInsets.only(
+              left: 24,
+              right: 24,
+              top: 24,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Rate & Review $name',
+                  style: AppTextStyles.title.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Share your experience with the TripMate community',
+                  style: AppTextStyles.caption.copyWith(color: AppColors.greyColor),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(5, (index) {
+                    return IconButton(
+                      icon: Icon(
+                        index < rating ? Icons.star_rounded : Icons.star_border_rounded,
+                        color: Colors.amber,
+                        size: 36,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          rating = index + 1;
+                        });
+                      },
+                    );
+                  }),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: reviewController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    hintText: 'Write your thoughts about $name...',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                PrimaryButton(
+                  text: 'Submit Review',
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Thank you! Rated $name $rating stars.'),
+                        backgroundColor: AppColors.greenColor,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

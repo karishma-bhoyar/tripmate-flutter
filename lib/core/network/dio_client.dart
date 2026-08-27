@@ -5,10 +5,19 @@ class DioClient {
   DioClient() {
     dio = Dio(
       BaseOptions(
-        connectTimeout: Duration(seconds: 2),
-        receiveTimeout: Duration(seconds: 2),
-        sendTimeout: Duration(seconds: 2),
+        connectTimeout: const Duration(seconds: 15),
+        receiveTimeout: const Duration(seconds: 15),
+        sendTimeout: const Duration(seconds: 15),
         headers: {'Content-Type': 'application/json'},
+      ),
+    );
+    dio.interceptors.add(
+      LogInterceptor(
+        requestHeader: false,
+        responseHeader: false,
+        requestBody: true,
+        responseBody: true,
+        error: true,
       ),
     );
   }

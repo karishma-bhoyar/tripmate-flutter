@@ -5,6 +5,7 @@ import 'package:flutter_application_tripmate/core/constants/app_size.dart';
 import 'package:flutter_application_tripmate/core/theme/app_text_style.dart';
 import 'package:flutter_application_tripmate/features/bookings/models/booking_model.dart';
 import 'package:flutter_application_tripmate/widgets/common/custom_app_bar.dart';
+import 'package:flutter_application_tripmate/widgets/common/primary_button.dart';
 import 'package:intl/intl.dart';
 
 @RoutePage()
@@ -12,6 +13,89 @@ class BookingViewDetailsScreen extends StatelessWidget {
   final BookingModel booking;
 
   const BookingViewDetailsScreen({super.key, required this.booking});
+
+  void _showTicketExportDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSizes.radius24),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSizes.spacing24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(AppSizes.spacing16),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.receipt_long_rounded,
+                  color: AppColors.primaryColor,
+                  size: 40,
+                ),
+              ),
+              const SizedBox(height: AppSizes.spacing16),
+              Text(
+                'E-Ticket Generated',
+                style: AppTextStyles.title.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              const SizedBox(height: AppSizes.spacing8),
+              Text(
+                'Your ticket for ${booking.hotelName} (ID: ${booking.id}) has been exported successfully.',
+                style: AppTextStyles.caption.copyWith(
+                  color: AppColors.greyColor,
+                  height: 1.4,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppSizes.spacing24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppSizes.radius12),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Ticket saved to Downloads!')),
+                        );
+                      },
+                      icon: const Icon(Icons.download_rounded, size: 18),
+                      label: const Text('Save PDF'),
+                    ),
+                  ),
+                  const SizedBox(width: AppSizes.spacing12),
+                  Expanded(
+                    child: PrimaryButton(
+                      text: 'Share',
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Sharing ticket receipt...')),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,42 +118,35 @@ class BookingViewDetailsScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: AppSizes.spacing8),
-
             Text(
               booking.location,
               style: AppTextStyles.body.copyWith(color: AppColors.greyColor),
             ),
-
             const SizedBox(height: AppSizes.spacing24),
-
             Text(
               'Booking Information',
               style: AppTextStyles.title.copyWith(fontWeight: FontWeight.bold),
             ),
-
             const SizedBox(height: AppSizes.spacing12),
-
             _buildInfoTile('Booking ID', booking.id),
-
             _buildInfoTile('Room', booking.roomName),
-
             _buildInfoTile(
               'Check-In',
               dateFormatter.format(booking.checkInDate),
             ),
-
             _buildInfoTile(
               'Check-Out',
               dateFormatter.format(booking.checkOutDate),
             ),
-
             _buildInfoTile('Guests', '${booking.guestCount} Adults'),
-
             _buildInfoTile('Total Amount', '₹${booking.totalAmount.round()}'),
-
             _buildInfoTile('Status', booking.status.name.toUpperCase()),
+            const SizedBox(height: AppSizes.spacing24),
+            PrimaryButton(
+              text: 'Download & Share Ticket',
+              onPressed: () => _showTicketExportDialog(context),
+            ),
           ],
         ),
       ),
