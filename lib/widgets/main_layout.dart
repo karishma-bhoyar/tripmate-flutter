@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_tripmate/core/constants/app_colors.dart';
 import 'package:flutter_application_tripmate/core/constants/app_size.dart';
 import 'package:flutter_application_tripmate/features/home/widgets/home_bottom_navigation.dart';
+import 'package:flutter_application_tripmate/widgets/common/connectivity_banner.dart';
 
 class MainLayout extends StatelessWidget {
   final Widget child;
@@ -15,18 +16,20 @@ class MainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSizes.spacing24,
-            vertical: AppSizes.spacing16,
+    return ConnectivityBanner(
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.spacing24,
+              vertical: AppSizes.spacing16,
+            ),
+            child: child,
           ),
-          child: child,
         ),
+        bottomNavigationBar: HomeBottomNavigation(currentIndex: currentIndex),
       ),
-      bottomNavigationBar: HomeBottomNavigation(currentIndex: currentIndex),
     );
   }
 }

@@ -37,6 +37,17 @@ class _HotelListScreenState extends State<HotelListScreen> {
       final matchRating = hotel.rating >= _minRating;
       return matchesDestination && matchesSearch && matchRating;
     }).toList();
+
+    if (list.isEmpty) {
+      list = _allHotels.where((hotel) {
+        final matchesSearch =
+            hotel.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+            hotel.location.toLowerCase().contains(_searchQuery.toLowerCase());
+        final matchRating = hotel.rating >= _minRating;
+        return matchesSearch && matchRating;
+      }).toList();
+    }
+
     if (_selectedSort == "Price : Low to High") {
       list.sort((a, b) {
         final priceA = int.parse(a.price.replaceAll(RegExp(r'[^0-9]'), ''));

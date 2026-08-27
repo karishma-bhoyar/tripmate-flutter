@@ -22,5 +22,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: BookingViewDetailsRoute.page),
     AutoRoute(page: BookingSummaryRoute.page),
     AutoRoute(page: FavoriteRoute.page),
+    AutoRoute(page: ProfileRoute.page),
+    AutoRoute(page: NotificationRoute.page),
   ];
 }

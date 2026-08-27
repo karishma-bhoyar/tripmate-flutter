@@ -27,6 +27,9 @@ class HomeBottomNavigation extends StatelessWidget {
           case 3:
             context.router.replace(FavoriteRoute());
             break;
+          case 4:
+            context.router.replace(ProfileRoute());
+            break;
         }
       },
       type: BottomNavigationBarType.fixed,
