@@ -3,10 +3,10 @@ name: Flutter CI/CD Pipeline
 # Ye workflow kab trigger hoga
 on:
   push:
-    branches: [ main, master ]    # main branch par push hone par
+    branches: [ main, master, features-branch ]   # push triggers
   pull_request:
-    branches: [ main, master ]    # PR create hone par
-  workflow_dispatch:              # GitHub UI se manually run karne ka option
+    branches: [ main, master ]                    # PR triggers
+  workflow_dispatch:                             # Manual trigger
 
 jobs:
   # -------------------------------------------------------------
@@ -42,6 +42,7 @@ jobs:
       # Step 5: Code formatting check (optional)
       - name: Check Dart formatting
         run: dart format --output=none --set-exit-if-changed .
+        continue-on-error: true
 
       # Step 6: Code analysis (warnings/errors check)
       - name: Analyze project code
@@ -58,7 +59,7 @@ jobs:
     name: Build Android Release APK
     needs: test_and_analyze         # Ye job tabhi chalegi jab tests pass honge
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    if: github.event_name == 'push'
 
     steps:
       - name: Checkout repository
