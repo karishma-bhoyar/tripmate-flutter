@@ -1,0 +1,91 @@
+name: Flutter CI/CD Pipeline
+
+# Ye workflow kab trigger hoga
+on:
+  push:
+    branches: [ main, master ]    # main branch par push hone par
+  pull_request:
+    branches: [ main, master ]    # PR create hone par
+  workflow_dispatch:              # GitHub UI se manually run karne ka option
+
+jobs:
+  # -------------------------------------------------------------
+  # JOB 1: CI (Linting, Formatting & Tests)
+  # -------------------------------------------------------------
+  test_and_analyze:
+    name: Code Analysis & Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Repository checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Java setup (Android build ke liye zaroori hai)
+      - name: Set up Java Development Kit (JDK)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # Step 3: Flutter SDK setup
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      # Step 4: Dependencies install karna
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Step 5: Code formatting check (optional)
+      - name: Check Dart formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      # Step 6: Code analysis (warnings/errors check)
+      - name: Analyze project code
+        run: flutter analyze
+
+      # Step 7: Run Unit & Widget tests
+      - name: Run tests
+        run: flutter test
+
+  # -------------------------------------------------------------
+  # JOB 2: CD (Build APK / App Bundle)
+  # -------------------------------------------------------------
+  build_android:
+    name: Build Android Release APK
+    needs: test_and_analyze         # Ye job tabhi chalegi jab tests pass honge
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Release APK build karna
+      - name: Build Release APK
+        run: flutter build apk --release
+
+      # Build APK ko GitHub Artifacts me upload karna (Taki aap download kar sakein)
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tripmate-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
